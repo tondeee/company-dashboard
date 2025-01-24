@@ -1,75 +1,8 @@
-// components/CompanyInfoWidget.tsx
 import { useState } from 'react';
-import { useQuery } from 'react-query';
-import axios from 'axios';
+import { ScrollArea } from './ui/scorll-area';
+import { useCompanies } from '../hooks/useCompanies';
 
-
-axios.defaults.baseURL = 'http://localhost:3001';
-
-interface CompanyData {
-  id: string;
-  ticker: string;
-  name: string;
-  lei: string;
-  legal_name: string;
-  stock_exchange: string;
-  sic: number;
-  short_description: string;
-  long_description: string;
-  ceo: string;
-  company_url: string;
-  business_address: string;
-  mailing_address: string;
-  business_phone_no: string;
-  hq_address1: string;
-  hq_address2: string | null;
-  hq_address_city: string;
-  hq_address_postal_code: string;
-  entity_legal_form: string;
-  cik: string;
-  latest_filing_date: string;
-  hq_state: string;
-  hq_country: string;
-  inc_state: string;
-  inc_country: string;
-  employees: number;
-  entity_status: string;
-  sector: string;
-  industry_category: string;
-  industry_group: string;
-  template: string;
-  standardized_active: boolean;
-  first_fundamental_date: string;
-  last_fundamental_date: string;
-  first_stock_price_date: string;
-  last_stock_price_date: string;
-  thea_enabled: boolean;
-  legacy_sector: string;
-  legacy_industry_category: string;
-  legacy_industry_group: string;
-}
-
-const useCompanies = () => {
-  return useQuery<CompanyData[]>('companies', 
-    async () => {
-      try {
-        const { data } = await axios.get('/companies');
-        return data;
-      } catch (error) {
-        console.error('Failed to fetch companies:', error);
-        throw error;
-      }
-    },
-    {
-      staleTime: 60000, 
-      cacheTime: 300000, 
-      retry: 2,
-      refetchOnWindowFocus: false,
-    }
-  );
-};
-
-const CompanyInfoWidget = ()  =>{
+const CompanyInfoWidget = () => {
   const [selectedTicker, setSelectedTicker] = useState('AAPL');
   const { data: companies, isLoading, error } = useCompanies();
 
@@ -82,7 +15,7 @@ const CompanyInfoWidget = ()  =>{
   );
 
   return (
-    <div className="p-4 space-y-4">
+    <div className="p-4 space-y-4 h-full  flex flex-col   ">
       <select 
         value={selectedTicker}
         onChange={(e) => setSelectedTicker(e.target.value)}
@@ -94,6 +27,7 @@ const CompanyInfoWidget = ()  =>{
           </option>
         ))}
       </select>
+      <ScrollArea className='flex-1 '>
 
       {selectedCompany && (
         <div className="space-y-3">
@@ -150,7 +84,7 @@ const CompanyInfoWidget = ()  =>{
             </div>
 
             <div className="col-span-1 md:col-span-2 space-y-2">
-              <h3 className="font-semibold">Short description</h3>
+              <h3 className="font-semibold">Short</h3>
               <p className="text-sm text-gray-600">{selectedCompany.short_description}</p>
               <h3 className="font-semibold">Long description</h3>
               <p className="text-sm text-gray-600">{selectedCompany.long_description}</p>
@@ -158,9 +92,9 @@ const CompanyInfoWidget = ()  =>{
           </div>
         </div>
       )}
+      </ScrollArea>
     </div>
   );
 }
-
 
 export default CompanyInfoWidget;
