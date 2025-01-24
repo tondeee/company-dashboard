@@ -35,7 +35,7 @@ export interface CompanyData {
   last_fundamental_date: string;
   first_stock_price_date: string;
   last_stock_price_date: string;
-  thea_enabled: boolean;
+  thea_enabled: boolean | null;
   legacy_sector: string;
   legacy_industry_category: string;
   legacy_industry_group: string;

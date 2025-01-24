@@ -80,7 +80,10 @@ const CompanyInfoWidget = () => {
               <p>Last Fundamental Date: {selectedCompany.last_fundamental_date}</p>
               <p>First Stock Price Date: {selectedCompany.first_stock_price_date}</p>
               <p>Last Stock Price Date: {selectedCompany.last_stock_price_date}</p>
-              <p>THEA Enabled: {selectedCompany.thea_enabled.toString()}</p>
+              <p>THEA Enabled: {selectedCompany.thea_enabled
+                ? selectedCompany.thea_enabled.toString() 
+                : 'No information'}
+              </p>
             </div>
 
             <div className="col-span-1 md:col-span-2 space-y-2">
